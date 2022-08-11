@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/head :: head(title='Main page')"></head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+<div class="container-fluid py-3">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+            data-bs-target="#editGroupModal">
+        Add new group
+    </button>
+</div>
+<div class="container-fluid py-3" th:if="${groups}">
+
+    <div class="d-flex flex-row justify-content-center">
+        <div class="col p-2" th:each="group : ${groups}">
+            <div class="form-control d-flex flex-row p-2 mb-1 bg-warning text-dark">
+                <h2 class="col pe-1" th:text="${group.key.name}"></h2>
+                <div class="px-2">
+                    <button class="fa-solid fa-pen-to-square fa-xl" title="Edit group"
+                            style='color: dodgerblue; background: none; border: 0'
+                            data-bs-toggle="modal" data-bs-target="#editGroupModal"
+                            th:data-bs-whatever="${group.key.id}">
+                    </button>
+                    <button type="button" class="fa-solid fa-calendar-plus fa-xl" title="Added task"
+                            style='color: darkred; background: none; border: 0'
+                            data-bs-toggle="modal" data-bs-target="#editTaskModal"
+                            th:data-bs-whatever="${group.key.id}+'|'+${group.value.size()}">
+                    </button>
+                </div>
+            </div>
+
+            <div class="card" th:each="task : ${group.value}">
+                <div th:if="${task}">
+                    <div class="card-header">
+                        <div class="d-flex flex-row">
+                            <h4 class="col" th:text="${task.name}"></h4>
+                            <div class="px-2">
+                                <button class="fa-solid fa-pen" title="Edit task"
+                                        style='color: darkred; background: none; border: 0'
+                                        data-bs-toggle="modal" data-bs-target="#editTaskModal"
+                                        th:data-bs-whatever="${group.key.id}+'|'+${group.value.size()}+'|'+${task.id}">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <!--                        <label class="col-form-label fw-bold">id:</label> <a th:text="${task.id}"></a>-->
+                        <!--                        <label class="col-form-label">name:</label> <a th:text="${task.name}"></a>-->
+
+                        <p class="card-text" th:text="${task.description}"></p>
+                        <label class="col-form-label fw-light" th:text="${task.dateCreate}"></label>
+
+                        <!--                        <label class="col-form-label">position:</label> <a th:text="${task.position}"></a>-->
+                        <!--                        <label class="col-form-label">group id:</label> <a th:text="${task.groupId}"></a>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div class="modal fade" id="editGroupModal" tabindex="-1" aria-labelledby="Edit group modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="labelGroupModal">Edit group</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div id="messageGroupModal" class="alert alert-success" role="alert" style="display: none;">
+            </div>
+            <div id="errorsGroupModal" class="alert alert-danger" role="alert" style="display: none;">
+            </div>
+
+            <div class="modal-body">
+                <form id="formGroupModal">
+                    <input type="hidden" id="idGroupEdit" name="id">
+                    <div class="col-auto mb-2">
+                        <label for="nameGroupEdit" class="col-form-label">Name:</label>
+                        <input type="text" class="form-control" id="nameGroupEdit" name="name">
+
+                        <div class="d-flex flex-row p-2">
+                            <div class="col-2">
+                                <label for="positionGroupEdit" class="col-form-label pe-2">Position:</label>
+                            </div>
+                            <div class="col-auto" th:if="${groups}">
+                                <select class="form-select" id="positionGroupEdit" name="position">
+                                    <option th:each="i : ${#numbers.sequence(1, (groups.keySet().size() == 0 ? 1 :groups.keySet().size()))}"
+                                            th:value="${i}"
+                                            th:text="${i}">
+                                    </option>
+<!--                                    <option th:if="${groups.keySet().size()>0}" th:value="0">to end</option>-->
+                                </select>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveBtnGroupModal">Save</button>
+                        <button type="button" class="btn btn-danger" id="deleteBtnGroupModal">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editTaskModal" tabindex="-1" aria-labelledby="Edit task modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="labelTaskModal">Edit task</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div id="messageTaskModal" class="alert alert-success" role="alert" style="display: none;">
+            </div>
+            <div id="errorsTaskModal" class="alert alert-danger" role="alert" style="display: none;">
+            </div>
+
+            <div class="modal-body">
+                <form method="post" id="formTaskModal">
+                    <input type="hidden" id="idTaskEdit" name="id">
+                    <div class="col-auto mb-2">
+                        <div class="d-flex flex-row p-2">
+                            <label for="nameTaskEdit" class="col-form-label pe-2">Name:</label>
+                            <input type="text" class="form-control" id="nameTaskEdit" name="name">
+                        </div>
+
+                        <div class="d-flex flex-row p-2">
+                            <label for="descriptionTaskEdit" class="col-form-label pe-2">Description:</label>
+                            <input type="text" class="form-control" id="descriptionTaskEdit" name="description">
+                        </div>
+
+                        <div class="d-flex flex-row p-2">
+                            <div class="col-2">
+                                <label for="positionTaskEdit" class="col-form-label pe-2">Position:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select" id="positionTaskEdit" name="position">
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="d-flex flex-row p-2">
+                            <div class="col-2">
+                                <label for="groupIdTaskEdit" class="col-form-label pe-2">Group:</label>
+                            </div>
+                            <div class="col-auto">
+                                <select class="form-select" id="groupIdTaskEdit" name="groupId" th:if="${groups}">
+                                    <option th:each="elemGroup : ${groups}"
+                                            th:value="${elemGroup.key.id}"
+                                            th:text="${elemGroup.key.name}">
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row p-2 align-items-center">
+                            <div class="col-2">
+                                <label for="dateCreateTaskEdit" class="col-form-label">Date: </label>
+                            </div>
+                            <div class="col">
+                                <input type="text" class="form-control"
+                                       id="dateCreateTaskEdit" name="dateCreate"
+                                       aria-describedby="dateCreateHelpInline" disabled>
+                            </div>
+                            <div class="col-auto">
+                                <span id="dateCreateHelpInline" class="form-text">
+                                  Field created automatically.
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" id="saveBtnTaskModal">Save</button>
+                        <button type="button" class="btn btn-danger" id="deleteBtnTaskModal">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/group.js}" type="text/javascript"></script>
+<script th:src="@{/js/task.js}" type="text/javascript"></script>
+
+</body>
+</html>

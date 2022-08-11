@@ -1,0 +1,46 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'java'
+}
+
+group = 'com.uapp'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    compileOnly 'org.projectlombok:lombok'
+
+    implementation group: 'io.springfox', name: 'springfox-swagger2', version: '3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+    implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+//    implementation group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-springsecurity5', version: '3.0.4.RELEASE'
+
+    runtimeOnly 'com.h2database:h2'
+    runtimeOnly 'org.postgresql:postgresql'
+    implementation 'org.flywaydb:flyway-core'
+
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

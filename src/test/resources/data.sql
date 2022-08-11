@@ -1,0 +1,2 @@
+DELETE FROM task;
+DELETE FROM groups;

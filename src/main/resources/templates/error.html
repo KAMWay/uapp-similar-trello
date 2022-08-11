@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:insert="fragments/head :: head(title='Error page')"></head>
+<body>
+<div th:insert="fragments/navbar :: navbar"></div>
+
+
+<div class="container pt-5" th:if="${param.message != null}" >
+    <div class="alert alert-danger" th:text="${param.message}"></div>
+</div>
+
+<div class="container pt-5">
+    <div class="alert alert-danger" th:text="${message}"></div>
+</div>
+
+<div class="container pt-5" th:each="error : ${errors}">
+    <div class="alert alert-danger" th:utext="${error}"></div>
+</div>
+
+</body>
+</html>

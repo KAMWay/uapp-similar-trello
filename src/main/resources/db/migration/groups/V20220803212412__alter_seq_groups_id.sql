@@ -1,0 +1,1 @@
+ALTER SEQUENCE groups_id_seq RESTART WITH 4;

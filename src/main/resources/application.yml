@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL:jdbc:postgresql://localhost:5432/similar-trello}
+    username: ${JDBC_DATABASE_USERNAME:postgres}
+    password: ${JDBC_DATABASE_PASSWORD:root}
+    driver-class-name: org.postgresql.Driver
+  flyway:
+    locations: "classpath:/db/migration/"
+    table: "schema_ver"
+    out-of-order: true
+    user: ${JDBC_DATABASE_USERNAME:postgres}
+    password: ${JDBC_DATABASE_PASSWORD:root}
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+  mvc:
+    pathmatch:
+      matching-strategy: ANT_PATH_MATCHER
+
+server:
+  port: 8080
